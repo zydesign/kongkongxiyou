@@ -136,6 +136,7 @@ cb.ClientManager = cc.Class.extend({
                 });
             }
         };
+        //要post到web服务器的信息sendData（username、password、channelId、Model）
         var sendData="username="+loginInfo.username+"&password="+loginInfo.password+"&channel="+loginInfo.channelId+"&model="+loginInfo.deviceModel;
         xhr.send(sendData);
     },
