@@ -98,12 +98,14 @@ cb.ClientManager = cc.Class.extend({
         var serverIp = cb.CommonLib.getServerURL();
         var httpHost="http://"+serverIp+":3001/login";
         cc.log("login=====>> username="+loginInfo.username+" password="+loginInfo.password+" httpHost="+httpHost);
+       //创建一个网络连接对象XMLHttpRequest
         var xhr = cc.loader.getXMLHttpRequest();  
         xhr.open("POST", httpHost,true);
         var self=this;
         xhr.onreadystatechange = function(){
             if (xhr.readyState == 4 && (xhr.status >= 200 && xhr.status <= 207)) {
                 cc.log("xhr.responseText="+xhr.responseText);
+                //状态码200-206服务器成功地接收客户端请求，则获取响应文本responseText
                 var data=JSON.parse(xhr.responseText);
                 
                 if(data.code=== 500) {
