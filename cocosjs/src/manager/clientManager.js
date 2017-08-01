@@ -91,7 +91,7 @@ require('src/scene/AreaScene.js');
 var effectManager=cb.EffectManager.getInstance();
 var mapManager=cb.MapManager.getInstance();
 
-
+//js语法：声明变量前加var就是私有变量，不加var就是全局变量，相当于Windows.   /脚本被预加载后，就可以全局使用
 cb.ClientManager = cc.Class.extend({
     
     login:function(loginInfo){
@@ -102,6 +102,7 @@ cb.ClientManager = cc.Class.extend({
         var xhr = cc.loader.getXMLHttpRequest();  
         xhr.open("POST", httpHost,true);
         var self=this;
+        //服务器返回结果的处理
         xhr.onreadystatechange = function(){
             if (xhr.readyState == 4 && (xhr.status >= 200 && xhr.status <= 207)) {
                 cc.log("xhr.responseText="+xhr.responseText);
@@ -138,7 +139,7 @@ cb.ClientManager = cc.Class.extend({
                 });
             }
         };
-        //要post到web服务器的信息sendData（username、password、channelId、Model）
+        //要post到web服务器的信息sendData字符串（username、password、channelId、Model）
         var sendData="username="+loginInfo.username+"&password="+loginInfo.password+"&channel="+loginInfo.channelId+"&model="+loginInfo.deviceModel;
         xhr.send(sendData);
     },
@@ -150,6 +151,7 @@ cb.ClientManager = cc.Class.extend({
         var xhr = cc.loader.getXMLHttpRequest();  
         xhr.open("POST", httpHost,true);
         // var self=this;
+        //服务器返回结果的处理
         xhr.onreadystatechange = function(){
             if (xhr.readyState == 4 && (xhr.status >= 200 && xhr.status <= 207)) {
                 cc.log("xhr.responseText="+xhr.responseText);
@@ -174,6 +176,7 @@ cb.ClientManager = cc.Class.extend({
         xhr.send(sendData);
     },
 
+    //验证登录服务器gate、connector
     authEntry:function(uid, token, callback){
         var serverIp = cb.CommonLib.getServerIP();
         if (!serverIp || serverIp.length === 0) {
