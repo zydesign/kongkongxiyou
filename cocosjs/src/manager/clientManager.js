@@ -94,6 +94,7 @@ var mapManager=cb.MapManager.getInstance();
 //js语法：声明变量前加var就是私有变量，不加var就是全局变量，相当于Windows.   /脚本被预加载后，就可以全局使用
 cb.ClientManager = cc.Class.extend({
     
+    //登录账户
     login:function(loginInfo){
         var serverIp = cb.CommonLib.getServerURL();
         var httpHost="http://"+serverIp+":3001/login";
@@ -144,6 +145,7 @@ cb.ClientManager = cc.Class.extend({
         xhr.send(sendData);
     },
 
+    //注册账户
     register:function(username,password){
         var serverIp = cb.CommonLib.getServerURL();
         var httpHost="http://"+serverIp+":3001/register";
@@ -206,6 +208,7 @@ cb.ClientManager = cc.Class.extend({
         });
     },
 
+    //进入游戏服务器
     entry:function(host, port, token, callback) {
         var selectScene=new SelectScene();
         var selectLayer=selectScene._selectLayer;
@@ -240,6 +243,7 @@ cb.ClientManager = cc.Class.extend({
         });
     },
 
+    //登录角色到场景
     loginPlayer: function(playerInfo) {
         propertyManager.setCurPlayer(playerInfo);
         // cc.log("loginPlayer===>>playerInfo="+JSON.stringify(playerInfo));
