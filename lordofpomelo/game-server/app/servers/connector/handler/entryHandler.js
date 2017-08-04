@@ -24,7 +24,7 @@ var pro = Handler.prototype;
 
 /**
  * New client entry game server. Check token and bind user info into session.
- *
+ * 新客户端进入游戏服务器。检查token并将用户信息绑定到session。
  * @param  {Object}   msg     request message
  * @param  {Object}   session current session object
  * @param  {Function} next    next stemp callback
@@ -45,10 +45,12 @@ pro.entry = function(msg, session, next) {
 	async.waterfall([
 		function(cb) {
 			// utils.myPrint("auth token=====>>");
+			// auth token   解析token后，并获取code、user信息
 			self.app.rpc.auth.authRemote.auth(session, token, cb);
 		},
 		function(code, user, cb) {
 			// utils.myPrint("query player info by user id=====>>");
+			// 通过uid查询角色信息
 			if (code !== 200) {
 				logger.error("entyHandler.entry token no pass", JSON.stringify(msg));
 				next(null, {
@@ -63,6 +65,7 @@ pro.entry = function(msg, session, next) {
 				});
 				return;
 			}
+			//修改了用户最后一次登录时间，登录次数，并更新到数据库
 			user.lastLoginTime = Date.now();
 			user.loginCount++;
 			userDao.updateUser(user);
@@ -95,6 +98,7 @@ pro.entry = function(msg, session, next) {
 			return;
 		}
 
+		//角色列表
 		var playersList = [];
 		// var playerIds=[];
 		for (var i = 0; i < players.length; i++) {
@@ -126,6 +130,7 @@ pro.entry = function(msg, session, next) {
 	});
 };
 
+//比lordofpomelo多一个entryPlayer函数，选定角色进入游戏后，这个函数才开始session.set
 pro.entryPlayer = function(msg, session, next) {
 	var playerId = msg.playerId;
 	var uid = msg.uid;
