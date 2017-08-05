@@ -108,6 +108,7 @@ cb.ClientManager = cc.Class.extend({
             if (xhr.readyState == 4 && (xhr.status >= 200 && xhr.status <= 207)) {
                 cc.log("xhr.responseText="+xhr.responseText);
                 //状态码200-206服务器成功地接收客户端请求，则获取响应文本responseText
+                //返回信息：code、token、uid（PS:uid是访问数据库获得，token通过Token.create得到）
                 var data=JSON.parse(xhr.responseText);
                 
                 if(data.code=== 500) {
