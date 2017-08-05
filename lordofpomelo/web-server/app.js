@@ -80,6 +80,7 @@ app.post('/login', function(req, res) {
       });
       return;
     }
+    //数据库没有改用户资料，默认通过输入的用户名和密码，创建了一个用户
     if (!user) {
       console.log('username not exist,create user!');
       userDao.createUser(msg, function(err, user) {
@@ -109,6 +110,7 @@ app.post('/login', function(req, res) {
       return;
     }
 
+    //验证密码是否跟数据库的密码相同
     if (password !== user.password) {
       // TODO code
       console.log('password incorrect!');
