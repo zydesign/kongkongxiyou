@@ -117,6 +117,7 @@ userDao.getUserById = function(uid, cb) {
 	});
 };
 
+//角色每次登入场景，更新一次角色类型id到user表单
 userDao.updateKindId = function(uid, kindId, cb) {
 	var sql = 'update User set lastKindId=? where id = ?';
 	var args = [kindId, uid];
@@ -171,6 +172,7 @@ userDao.createUser = function(userInfo, cb) {
 			}, null);
 		} else {
 			var user = new User({
+				//加入uid
 				id: res.insertId,
 				name: userInfo.username,
 				password: userInfo.password,
@@ -241,6 +243,7 @@ userDao.getKindIdByPlayerId = function(playerId, cb) {
 	});
 };
 
+//通过角色id获取角色
 userDao.getSQLPlayer = function(playerId, cb) {
 	var sql = 'select * from Player where id = ?';
 	var args = [playerId];
@@ -276,6 +279,7 @@ userDao.getPlayerByName = function(name, cb) {
 	});
 };
 
+//通过角色名获取角色
 userDao.getSQLPlayerByName = function(name, cb) {
 	var sql = 'select * from Player where name = ?';
 	var args = [name];
@@ -383,14 +387,17 @@ userDao.getPlayerAllInfo = function(playerId, cb) {
 
 /**
  * Create a new player
+ * 通过uid、角色名、角色类型创建新角色，
  * @param {String} uid User id.
  * @param {String} name Player's name in the game.
  * @param {Number} kindId Player's kindId, decide which kind of player to create.
  * @param {function} cb Callback function
  */
 userDao.createPlayer = function(uid, name, kindId, cb) {
+	//插入一个新角色信息到数据库Player表
 	var sql = 'insert into Player (userId, kindId, skinId, name, level, hp, mp) values(?,?,?,?,?,?,?)';
 	// var role = dataApi.role.findById(kindId);
+	//通过角色类型id获取配置表的初始角色属性信息
 	var character = dataApi.character.findById(kindId);
 	if (!character) {
 		utils.invokeCallback(cb, TypeError('skinId is not founded'), kindId);
@@ -408,6 +415,7 @@ userDao.createPlayer = function(uid, name, kindId, cb) {
 			logger.error(err);
 			utils.invokeCallback(cb, err.message, null);
 		} else {
+			//加入了一个playerId
 			res.id = res.insertId;
 			utils.invokeCallback(cb, null, res);
 		}
@@ -416,6 +424,7 @@ userDao.createPlayer = function(uid, name, kindId, cb) {
 
 /**
  * Update a player
+ * 更新数据库角色信息（角色坐标、血、蓝、等级、经验、所在地图id等等）
  * @param {Object} player The player need to update, all the propties will be update.
  * @param {function} cb Callback function.
  */
