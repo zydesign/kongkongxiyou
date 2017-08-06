@@ -154,7 +154,7 @@ cb.ClientManager = cc.Class.extend({
         var xhr = cc.loader.getXMLHttpRequest();  
         xhr.open("POST", httpHost,true);
         // var self=this;
-        //服务器返回结果的处理
+        //服务器返回结果的处理（返回的是uid、token）
         xhr.onreadystatechange = function(){
             if (xhr.readyState == 4 && (xhr.status >= 200 && xhr.status <= 207)) {
                 cc.log("xhr.responseText="+xhr.responseText);
@@ -237,6 +237,7 @@ cb.ClientManager = cc.Class.extend({
 
                 cc.log("uid="+data.uid+" kindId="+data.kindId+" serverTime="+data.time+" localTime="+Date.now());
 
+                //在这里更新了客户端的app的uid。（登录游戏进入角色选择界面时）
                 app.uid=data.uid;
                 app.setServerTime(data.time);
                 selectLayer.showPlayer(data.players,data.kindId);
@@ -272,11 +273,14 @@ cb.ClientManager = cc.Class.extend({
         });
     },
 
+    //断线重连
     loginPlayerAgain:function(){
         var playerInfo=propertyManager.getCurPlayer();
         this.loginPlayer(playerInfo);
     },
 
+    //创建角色
+    //通过自定义角色名、角色类型id（战士、法师、弓箭手）创建角色到数据库
     createPlayer:function(name,kindId){
         cc.log("========>> name="+name+" kindId="+kindId);
         if (!name || name.length===0) {
@@ -289,6 +293,7 @@ cb.ClientManager = cc.Class.extend({
             this.loading = true;
             circleLoadLayer.showCircleLoad();
             var self=this;
+            //访问服务器创建角色，主线任务，战斗技能，返回code、playerId
             pomelo.request("connector.roleHandler.createPlayer", {name: name,uid:app.uid, kindId: kindId}, function(data) {
                 
                 if (!data.code || data.code !== 200) {
