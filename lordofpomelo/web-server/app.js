@@ -1,3 +1,5 @@
+//登录、注册、验证等网络通信服务
+
 var express = require('express');
 var Token = require('../shared/token');
 var secret = require('../shared/config/session').secret;
@@ -42,6 +44,7 @@ app.configure('production', function() {
   app.use(express.errorHandler());
 });
 
+//验证成功监听
 app.get('/auth_success', function(req, res) {
   if (req.session.userId) {
     var token = Token.create(req.session.userId, Date.now(), secret);
@@ -57,6 +60,7 @@ app.get('/auth_success', function(req, res) {
   }
 });
 
+//登录监听
 app.post('/login', function(req, res) {
   var msg = req.body;
   console.log('/login msg:%j', msg);
@@ -80,7 +84,8 @@ app.post('/login', function(req, res) {
       });
       return;
     }
-    //数据库没有改用户资料，默认通过输入的用户名和密码，创建了一个用户
+    //数据库获取不到user，默认通过输入的用户名和密码，自动创建了一个用户
+    //这是空空西游自己的新账号，自动注册机制....一般不这样做
     if (!user) {
       console.log('username not exist,create user!');
       userDao.createUser(msg, function(err, user) {
@@ -110,7 +115,7 @@ app.post('/login', function(req, res) {
       return;
     }
 
-    //验证密码是否跟数据库的密码相同
+    //如果数据库获取得到user，验证密码是否跟该user的密码相同
     if (password !== user.password) {
       // TODO code
       console.log('password incorrect!');
@@ -162,11 +167,14 @@ app.post('/register', function(req, res) {
   });
 });
 
+//更新json路径
 var updateJsonPath = publicPath + "/res/update.json";
 
+//获取更新版本信息   参数：应用版本、资源版本
 function getUpdateVersionInfo(appVer, resVer) {
   var updateVersionInfo = {};
 
+  //更新内容
   var content = fs.readFileSync(updateJsonPath, 'utf-8');
   var updateVersionInfos = JSON.parse(content);
 
