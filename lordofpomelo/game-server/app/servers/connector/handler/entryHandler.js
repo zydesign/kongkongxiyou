@@ -71,6 +71,7 @@ pro.entry = function(msg, session, next) {
 			userDao.updateUser(user);
 
 			// utils.myPrint("userDao.getPlayersByUid====>>");
+			//通过用户信息获取上一次登录的角色类型id，
 			lastKindId = user.lastKindId || 0;
 			uid = user.id;
 			userDao.getPlayersByUid(user.id, cb);
@@ -98,7 +99,7 @@ pro.entry = function(msg, session, next) {
 			return;
 		}
 
-		//角色列表
+		//创建过的角色列表
 		var playersList = [];
 		// var playerIds=[];
 		for (var i = 0; i < players.length; i++) {
@@ -158,6 +159,7 @@ pro.entryPlayer = function(msg, session, next) {
 				return;
 			}
 
+			//通过角色id获取该角色信息
 			for (var i = 0; i < players.length; i++) {
 				if (playerId === players[i].id) {
 					player = players[i];
@@ -168,6 +170,7 @@ pro.entryPlayer = function(msg, session, next) {
 				cb("no player");
 				return;
 			}
+			//角色每次登入场景，更新一次角色类型id到user表单，方便重新登录，或断线重连继续登录该角色
 			userDao.updateKindId(uid,player.kindId);
 	
 			// if (rpc.manager) {
