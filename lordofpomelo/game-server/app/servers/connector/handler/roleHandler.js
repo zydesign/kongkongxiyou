@@ -33,6 +33,7 @@ Handler.prototype.createPlayer = function(msg, session, next) {
 		return;
 	}
 
+	//起名字 过滤禁用字眼
 	var fbword = null;
 	var searchIndex = null;
 	for (var i = 0; i < forbid_word.length; i++) {
@@ -46,6 +47,7 @@ Handler.prototype.createPlayer = function(msg, session, next) {
 		}
 	};
 
+	//通过角色名查找数据库是否重名
 	userDao.getSQLPlayerByName(name, function(err, player) {
 		if (player) {
 			next(null, {
@@ -54,6 +56,7 @@ Handler.prototype.createPlayer = function(msg, session, next) {
 			return;
 		}
 
+		//没有重名，数据库创建角色，返回player：{uid, kindId, skinId, name, 1, hp, mp}
 		userDao.createPlayer(uid, name, kindId, function(err, player) {
 			if (err) {
 				logger.error('[register] fail to invoke createPlayer for ' + err.stack);
@@ -72,10 +75,13 @@ Handler.prototype.createPlayer = function(msg, session, next) {
 			} else {
 				async.parallel([
 						function(callback) {
+							//创建主线任务
 							mainTaskDao.createMainTaskByPlayId(player.id, callback);
 						},
 						function(callback) {
+							//角色1级初始信息
 							var character = dataApi.character.findById(kindId);
+							//战斗技能数据
 							var skillData = dataApi.fightskill.findById(character.skillId);
 							var fightSkill = {
 								skillId: character.skillId,
