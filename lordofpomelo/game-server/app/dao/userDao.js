@@ -22,6 +22,7 @@ var userDao = module.exports;
 
 /**
  * Get user data by username.
+ * 通过用户名获取user
  * @param {String} username
  * @param {String} passwd
  * @param {function} cb
@@ -49,6 +50,7 @@ userDao.getUserInfo = function(username, passwd, cb) {
 	});
 };
 
+//更新用户信息，主要更新登录时间、登录次数、登录角色类型id，uid
 userDao.updateUser = function(user, cb) {
 	var sql = 'update User set lastLoginTime = ?,loginCount=?,lastKindId=? where id = ?';
 	var args = [user.lastLoginTime, user.loginCount, user.lastKindId, user.id];
@@ -69,6 +71,7 @@ userDao.updateUser = function(user, cb) {
 
 /**
  * Get userInfo by username
+ * 通过用户名获取user
  * @param {String} username
  * @param {function} cb
  */
@@ -97,6 +100,7 @@ userDao.getUserByName = function(username, cb) {
 
 /**
  * get user infomation by userId
+ * 通过uid获取user
  * @param {String} uid UserId
  * @param {function} cb Callback function
  */
@@ -117,7 +121,7 @@ userDao.getUserById = function(uid, cb) {
 	});
 };
 
-//角色每次登入场景，更新一次角色类型id到user表单
+//角色每次登入场景，更新一次角色类型id到user表单   //没cb？
 userDao.updateKindId = function(uid, kindId, cb) {
 	var sql = 'update User set lastKindId=? where id = ?';
 	var args = [kindId, uid];
@@ -134,6 +138,7 @@ userDao.updateKindId = function(uid, kindId, cb) {
 
 /**
  * delete user by username
+ * 通过用户名删除user
  * @param {String} username
  * @param {function} cb Call back function.
  */
@@ -155,6 +160,7 @@ userDao.deleteByName = function(username, cb) {
 
 /**
  * Create a new user
+ * 创建一个新用户
  * @param (String) username
  * @param {String} password
  * @param {String} from Register source
@@ -186,6 +192,7 @@ userDao.createUser = function(userInfo, cb) {
 
 /**
  * Get an user's all players by userId
+ * 通过uid获取所有已创建角色
  * @param {Number} uid User Id.
  * @param {function} cb Callback function.
  */
@@ -208,7 +215,8 @@ userDao.getPlayersByUid = function(uid, cb) {
 };
 
 /**
- * Get an user's all players by userId
+ * Get an user's all players by playerId
+ * 通过角色id获取已创建角色数据，并初始化为角色类
  * @param {Number} playerId
  * @param {function} cb Callback function.
  */
