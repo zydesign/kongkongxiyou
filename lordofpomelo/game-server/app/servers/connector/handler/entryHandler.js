@@ -159,13 +159,14 @@ pro.entryPlayer = function(msg, session, next) {
 				return;
 			}
 
-			//通过角色id获取该角色信息
+			//使用客户端发来的角色id，匹配对应角色
 			for (var i = 0; i < players.length; i++) {
 				if (playerId === players[i].id) {
 					player = players[i];
 					break;
 				}
 			}
+			//如果没有角色信息，不继续后面操作，如果有角色就继续后面操作，建立session，进入场景等
 			if (!player) {
 				cb("no player");
 				return;
@@ -216,6 +217,8 @@ pro.entryPlayer = function(msg, session, next) {
 
 				// var areaIdMaps = app.get('areaIdMap');
 				// serverId = areaIdMaps[0];
+			
+	                //将area-server存为serverId，到session
 				serverId="area-server";
 				session.set('serverId', serverId);
 				utils.myPrint("entryPlayer entry areaId=", player.areaId, ",serverId＝", serverId);
@@ -226,12 +229,16 @@ pro.entryPlayer = function(msg, session, next) {
 			session.set('kindId', player.kindId);
 			session.set('playerId', player.id);
 			
+			//如果有工会Id,则存入session
 			if (player.guildId) {
 				session.set('guildId', player.guildId);
 			}
+			
+			//如果有vip，则存入session
 			if (player.vip) {
 				session.set('vip', player.vip);
 			}
+			//监听断线
 			session.on('closed', onUserLeave.bind(null, app));
 			session.pushAll(cb);
 		}
@@ -243,6 +250,7 @@ pro.entryPlayer = function(msg, session, next) {
 			});
 			return;
 		}
+		//如果没有错误，返回code：200给客户端
 		next(null, {
 			code: 200
 		});
@@ -250,15 +258,19 @@ pro.entryPlayer = function(msg, session, next) {
 		// if (rpc.chat) {
 		// 	rpc.chat.chatRemote.add(session, player.userId, player.id,channelUtil.getGlobalChannelName(), BlankFunc);
 		// }
+		//加入聊天服务器
 		handleRemote.chatRemote_add(session, player.userId, player.id,channelUtil.getGlobalChannelName());
+		//工会
 		if (rpc.manager) {
 			rpc.manager.guildRemote.enterGuild(session, player.userId, player.guildId, player.id, BlankFunc);
 		}
 	});
 };
 
+//重置场景
 pro.resetArea = function(msg, session, next) {
 	var areaId = Math.random() > 0.5 ? 1001 : 2001;
+	//severId有问题，这个值（1001或2001）获取不到服务器id  （0）
 	var serverId = this.app.get('areaIdMap')[areaId];
 	session.set('serverId', serverId);
 	session.set('instanceId', 0);
@@ -266,6 +278,7 @@ pro.resetArea = function(msg, session, next) {
 	next();
 };
 
+//准备离开场景
 pro.fixLeaveArea=function(msg, session, next){
 	var leaveAreaId=msg.areaId;
 	var areaData = dataApi.area.findById(leaveAreaId);
