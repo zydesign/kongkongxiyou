@@ -6,7 +6,7 @@ var util = require('util');
 
 /**
  * Initialize a new 'User' with the given 'opts'.
- *
+ * 通过配置参数初始化一个新user
  * @param {Object} opts
  * @api public
  */
