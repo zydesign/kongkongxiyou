@@ -1,14 +1,14 @@
-var TryAndAdjust = require('../node/tryAndAdjust');     //尝试调整
-var TryAttack = require('../action/tryAttack');         //尝试攻击
-var TryPick = require('../action/tryPick');             //尝试拾取
-var TryTalkToNpc = require('../action/tryTalkToNpc');   //尝试与NPC对话
-var MoveToTarget = require('../action/moveToTarget');   //移动到目标位置
-var MoveToTargetForAttack = require('../action/moveToTargetForAttack');   //移动到目标位置并进行攻击
+var TryAndAdjust = require('../node/tryAndAdjust');     //尝试调整节点
+var TryAttack = require('../action/tryAttack');         //尝试攻击节点
+var TryPick = require('../action/tryPick');             //尝试拾取节点
+var TryTalkToNpc = require('../action/tryTalkToNpc');   //尝试与NPC对话节点
+var MoveToTarget = require('../action/moveToTarget');   //移动到目标位置节点
+var MoveToTargetForAttack = require('../action/moveToTargetForAttack');   //移动到目标位置并进行攻击节点
 
-var bt = require('pomelo-bt');    //AI所依赖的行为树
-var Loop = bt.Loop;   //行为树的循环节点
-var If = bt.If;       //行为树的条件函数
-var Select = bt.Select;  //行为树的选择函数
+var bt = require('pomelo-bt');    //AI行为树模块
+var Loop = bt.Loop;   //循环节点
+var If = bt.If;       //if节点（带条件节点的系列节点）
+var Select = bt.Select;  //选择节点
 var consts = require('../../consts/consts');
 
 /**
@@ -22,7 +22,7 @@ var Brain = function(blackboard) {
 	var pick = genPickAction(blackboard);      //生成拾取行为
 	var talkToNpc = genNpcAction(blackboard);  //生成NPC行为
 
-	//实例一个选择行为
+	//实例一个选择节点
 	var action = new Select({
 		blackboard: blackboard
 	});
@@ -43,9 +43,10 @@ pro.update = function() {
 	return this.action.doAction();
 };
 
-//生成攻击行为
+//生成攻击动作
 var genAttackAction = function(blackboard) {
 	//try attack and move to target action
+	//攻击节点
 	var attack = new TryAndAdjust({
 		blackboard: blackboard, 
 		adjustAction: new MoveToTargetForAttack({
@@ -60,10 +61,10 @@ var genAttackAction = function(blackboard) {
 		})
 	});
 
-	//loop attack action
+	//loop attack action 循环攻击的条件
 	var checkTarget = function(bb) {
 		if(bb.curTarget !== bb.curCharacter.target) {
-			// target has change
+			// target has change 目标已改变
 			bb.curTarget = null;
 			return false;
 		}
@@ -71,10 +72,11 @@ var genAttackAction = function(blackboard) {
 		return !!bb.curTarget;
 	};
 
+	//另一个节点loopAttack为循环节点loop（带循环条件的包装节点）
 	var loopAttack = new Loop({
 		blackboard: blackboard, 
-		child: attack, 
-		loopCond: checkTarget
+		child: attack,  //包装节点的子节点
+		loopCond: checkTarget  //循环条件
 	});
 
 	//if have target then loop attack action
@@ -98,10 +100,11 @@ var genAttackAction = function(blackboard) {
 		return false;
 	};
 
+	//攻击节点最后生成的是if节点（带条件节点的Sequence序列节点）
 	return new If({
 		blackboard: blackboard, 
-		cond: haveTarget, 
-		action: loopAttack
+		cond: haveTarget,   //用于生成条件节点condition
+		action: loopAttack  //另外一个子节点
 	});
 };
 
