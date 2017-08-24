@@ -24,7 +24,7 @@ var Node = function(opts) {
 	adjustAndTryAgain.addChild(opts.adjustAction);  //调整动作
 	adjustAndTryAgain.addChild(opts.tryAction);     //尝试攻击
 
-	//创建一个选择节点，并增加子节点
+	//创建一个选择节点（攻击-调整再攻击），并增加子节点
 	var tryAndAdjust = new Select(opts);
 	tryAndAdjust.addChild(opts.tryAction);     //尝试攻击
 	tryAndAdjust.addChild(adjustAndTryAgain);  //调整再次攻击
