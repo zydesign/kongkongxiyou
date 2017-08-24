@@ -6,6 +6,7 @@ module.exports = Service;
 
 var pro = Service.prototype;
 
+//大脑服务可以获取大脑和注册大脑
 pro.getBrain = function(type, blackboard) {
 	// TODO: mock data
 	// 如果类型既不是autoFight，也不是player，才会执行type = 'tiger'
