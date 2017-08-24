@@ -43,15 +43,17 @@ pro.update = function() {
 	return this.action.doAction();
 };
 
-//生成攻击动作
+//生成攻击动作节点
 var genAttackAction = function(blackboard) {
 	//try attack and move to target action
-	//攻击节点
+	//攻击节点   （尝试攻击并调整攻击）
 	var attack = new TryAndAdjust({
 		blackboard: blackboard, 
+		//调整动作
 		adjustAction: new MoveToTargetForAttack({
 			blackboard: blackboard
 		}), 
+		//尝试攻击
 		tryAction: new TryAttack({
 			blackboard: blackboard 
 			// getSkillId: function(bb) {
