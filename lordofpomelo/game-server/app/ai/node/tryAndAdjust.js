@@ -19,7 +19,7 @@ var util = require('util');
 var Node = function(opts) {
 	BTNode.call(this, opts.blackboard);
 
-	//创建一个序列节点，并增加子节点
+	//创建一个序列节点（//调整再次攻击），并增加子节点
 	var adjustAndTryAgain = new Sequence(opts);
 	adjustAndTryAgain.addChild(opts.adjustAction);  //调整动作
 	adjustAndTryAgain.addChild(opts.tryAction);     //尝试攻击
