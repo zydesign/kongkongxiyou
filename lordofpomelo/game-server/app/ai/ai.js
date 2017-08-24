@@ -20,7 +20,7 @@ exp.createManager = function(opts) {
 	});
 
 	opts = opts || {};
-	//引入智慧服务
+	//给参数添加属性，大脑服务
 	opts.brainService = brainService;
 	return new AiManager(opts);
 };
