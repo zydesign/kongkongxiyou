@@ -3,6 +3,7 @@ var EntityType = require('../../consts/consts').EntityType;
 
 var exp = module.exports;
 
+//ai管理器属性有：大脑服务、场景、玩家、怪物
 var Manager = function(opts) {
 	this.brainService = opts.brainService;
 	this.area = opts.area;
@@ -41,12 +42,13 @@ pro.addCharacters = function(cs) {
 
 	//create brain for the character.
 	//给角色创建大脑，玩家或者怪物
+	//根据参数给的type属性，决定添加的大脑到players或mobs
 	//TODO: add a brain pool?
 	var c;
 	for(var i=0, l=cs.length; i<l; i++) {
 		c = cs[i];
 		var brain;
-		//如果c.type的类型为玩家
+		//如果c.type的类型为玩家，continue才执行后面
 		if(c.type ===EntityType.PLAYER) {
 			// continue;
 			if(this.players[c.entityId]) {
