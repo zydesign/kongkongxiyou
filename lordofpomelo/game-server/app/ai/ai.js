@@ -5,7 +5,7 @@ var path = require('path');
 
 var exp = module.exports;
 
-//创建一个ai管理实例
+//创建一个AiManager实例，主要是给参数添加大脑服务brainService属性，注册大脑到brainService
 exp.createManager = function(opts) {
 	var brainService = new BrainService();
 	fs.readdirSync(__dirname + '/brain').forEach(function(filename){
