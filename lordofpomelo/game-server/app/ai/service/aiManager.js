@@ -5,6 +5,7 @@ var exp = module.exports;
 
 //ai管理器属性有：大脑服务、场景、玩家、怪物
 var Manager = function(opts) {
+	//这里的opts.brainService已经存放了大脑
 	this.brainService = opts.brainService;
 	this.area = opts.area;
 	this.players = {};
@@ -27,8 +28,10 @@ pro.stop = function() {
  * Add a character into ai manager.
  * Add a brain to the character if the type is mob.
  * Start the tick if it has not started yet.
- * 增加一个角色到ai管理器。如果角色类型为怪物，增加一个大脑。如果没开始则开始计时。
+ * 通过给一个角色添加大脑。如果角色类型为怪物，增加一个大脑。如果没开始则开始计时。
  */
+
+       //参数cs为角色数组
 pro.addCharacters = function(cs) {
 	 // return;
 	//如果还没开始或已经结束，则不增加角色大脑
@@ -41,20 +44,21 @@ pro.addCharacters = function(cs) {
 	}
 
 	//create brain for the character.
-	//给角色创建大脑，玩家或者怪物
-	//根据参数给的type属性，决定添加的大脑到players或mobs
+	//通过aiManager给角色创建大脑， 玩家或者怪物
+	//根据参数给的type属性，决定添加的大脑类型player或tiger
 	//TODO: add a brain pool?
 	var c;
 	for(var i=0, l=cs.length; i<l; i++) {
 		c = cs[i];
 		var brain;
-		//如果c.type的类型为玩家，continue才执行后面
+		//如果c.type的类型为玩家，continue才执行后面，否则遍历下一个
 		if(c.type ===EntityType.PLAYER) {
 			// continue;
 			if(this.players[c.entityId]) {
 				continue;
 			}
 
+			//大脑服务获取大脑类型player类，通过参数实例该类的大脑
 			brain = this.brainService.getBrain('player', Blackboard.create({
 				manager: this,
 				area: this.area,
