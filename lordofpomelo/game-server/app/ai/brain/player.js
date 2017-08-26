@@ -46,7 +46,8 @@ pro.update = function() {
 //生成攻击动作节点
 var genAttackAction = function(blackboard) {
 	//try attack and move to target action
-	//攻击节点   （尝试攻击并调整攻击）
+	
+	//loopAttack循环节点的子节点：攻击节点attack    （尝试攻击并调整攻击）
 	var attack = new TryAndAdjust({
 		blackboard: blackboard, 
 		//调整动作
@@ -63,8 +64,12 @@ var genAttackAction = function(blackboard) {
 		})
 	});
 
-	//loop attack action 循环攻击的条件
+	//loop attack action 
+	//loopAttack循环节点的条件：循环条件 （如果没有切换目标，攻击是同一个，循环条件为true，如果切换了，为false）
+	//参数bb就是blackboard，因为在loop节点里循环条件call了这个参数进去this.loopCond.call(null, this.blackboard)
 	var checkTarget = function(bb) {
+		//如果当前要锁定的目标跟之前不同，则不锁定任何目标，值为null
+		//bb.curTarget会在haveTarget赋值
 		if(bb.curTarget !== bb.curCharacter.target) {
 			// target has change 目标已改变
 			bb.curTarget = null;
@@ -82,11 +87,13 @@ var genAttackAction = function(blackboard) {
 	});
 
 	//if have target then loop attack action
+	//如果有目标，则循环攻击
 	var haveTarget = function(bb) {
 		var character = bb.curCharacter;
 		var targetId = character.target;
 		var target = bb.area.getEntity(targetId);
 
+		//如果目标丢失，当前目标变null，条件返回false
 		if(!target) {
 			// target has disappeared
 			character.forgetHater(targetId);
@@ -94,11 +101,13 @@ var genAttackAction = function(blackboard) {
 			return false;
 		}
 
+		//如果目标类型为怪物或玩家，当前目标添加targetId，条件返回true
 		if(target.type === consts.EntityType.MOB || 
 			target.type === consts.EntityType.PLAYER) {
 			bb.curTarget = targetId;
 			return true;
 		}
+		//如果目标不是怪物或玩家，而是npc，条件返回false
 		return false;
 	};
 
