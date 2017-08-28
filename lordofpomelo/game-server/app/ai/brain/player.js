@@ -47,7 +47,7 @@ pro.update = function() {
 var genAttackAction = function(blackboard) {
 	//try attack and move to target action
 	
-	//loopAttack循环节点的子节点：攻击节点attack    （尝试攻击并调整攻击）
+	//loopAttack循环节点的子节点：攻击节点attack    （尝试攻击 或 调整动作+尝试攻击）
 	var attack = new TryAndAdjust({
 		blackboard: blackboard, 
 		//调整动作
@@ -80,6 +80,8 @@ var genAttackAction = function(blackboard) {
 	};
 
 	//另一个节点loopAttack为循环节点loop（带循环条件的包装节点）
+	
+	//后面的if节点的条件haveTarget为真的时候，才给curTarget添加目标，checkTarget循环条件才为真
 	var loopAttack = new Loop({
 		blackboard: blackboard, 
 		child: attack,  //包装节点的子节点
@@ -90,18 +92,20 @@ var genAttackAction = function(blackboard) {
 	//如果有目标，则循环攻击
 	var haveTarget = function(bb) {
 		var character = bb.curCharacter;
+		//要从角色里面获取目标
 		var targetId = character.target;
 		var target = bb.area.getEntity(targetId);
 
 		//如果目标丢失，当前目标变null，条件返回false
 		if(!target) {
 			// target has disappeared
+			//如果目标消失，角色放弃锁定该目标
 			character.forgetHater(targetId);
 			bb.curTarget = null;
 			return false;
 		}
 
-		//如果目标类型为怪物或玩家，当前目标添加targetId，条件返回true
+		//如果目标类型为怪物或玩家，给黑板的属性curTarget赋值，条件返回true
 		if(target.type === consts.EntityType.MOB || 
 			target.type === consts.EntityType.PLAYER) {
 			bb.curTarget = targetId;
@@ -144,6 +148,7 @@ var genPickAction = function(blackboard) {
 			return false;
 		}
 
+		//如果可拾取，给黑板的curTarget赋值
 		if(consts.isPickable(target)) {
 			bb.curTarget = targetId;
 			return true;
