@@ -36,6 +36,7 @@ pro.doAction = function() {
 	// console.log("AI tryAttack=============>>"+character.characterData.name);
 
 	//如果当期角色获取不到当前技能，返回失败
+	//PS:curSkill由moveToTargetForAttackJ节点赋值
 	if(!character.curSkill){
 		// console.log("AI tryAttack=============>> !curSkill");
 		return bt.RES_FAIL;
