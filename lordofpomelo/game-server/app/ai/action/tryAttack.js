@@ -12,6 +12,7 @@ var AttackResult=require('../../consts/consts').AttackResult;
 var Action = function(opts) {
 	//继承根节点，目的获取黑板属性，技能id
 	BTNode.call(this, opts.blackboard);
+	//getSkillId没用到，curSkill是从curCharacter获取
 	this.getSkillId = opts.getSkillId;
 };
 util.inherits(Action, BTNode);
