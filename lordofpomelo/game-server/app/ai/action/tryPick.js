@@ -27,13 +27,16 @@ var pro = Action.prototype;
 pro.doAction = function() {
 	var blackboard=this.blackboard;
 	var character = blackboard.curCharacter;
+	//黑板的curTarget由player大脑的haveTarget赋值
 	var targetId = blackboard.curTarget;
 	var area = blackboard.area;
 
 	var target = area.getEntity(targetId);
 
+	//如果目标不存在，初始化当前目标，角色目标；doAction返回结果失败
 	if(!target) {
 		// target has disappeared
+		
 		blackboard.curTarget = null;
 		if(targetId === character.target) {
 			character.target = null;
@@ -41,6 +44,7 @@ pro.doAction = function() {
 		return bt.RES_FAIL;
 	}
 
+	//当前目标与角色目标不匹配，说明目标改变，要初始化当前目标，doAction结果返回失败
 	if(targetId !== character.target 
 		|| (target.type !==EntityType.ITEM 
 			&& target.type !==EntityType.EQUIPMENT)) {
@@ -49,7 +53,9 @@ pro.doAction = function() {
 		return bt.RES_FAIL;
 	}
 
+	//如果目标存在，而且匹配角色目标，执行角色拾取函数
 	var res = character.pickItem(target.entityId);
+	//判断拾取结果：成功、物品消失，背包满，则初始化当前目标，角色目标，doAction结果返回成功
 	if(res === Pick.SUCCESS  
 		|| res === Pick.VANISH 
 		|| res === Pick.BAG_FULL
@@ -59,6 +65,7 @@ pro.doAction = function() {
 		return bt.RES_SUCCESS;
 	}
 
+	//如果拾取结果不在拾取范围内
 	if(res === Pick.NOT_IN_RANGE) {
 		blackboard.distanceLimit = 100;
 	}
