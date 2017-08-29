@@ -65,7 +65,7 @@ pro.doAction = function() {
 		return bt.RES_SUCCESS;
 	}
 
-	//如果拾取结果不在拾取范围内
+	//如果拾取结果不在拾取范围内，黑板拾取距离赋值100，doAction结果返回失败
 	if(res === Pick.NOT_IN_RANGE) {
 		blackboard.distanceLimit = 100;
 	}
