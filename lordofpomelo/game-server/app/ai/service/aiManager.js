@@ -6,9 +6,10 @@ var exp = module.exports;
 
 //ai管理器属性有：大脑服务、场景、玩家、怪物
 var Manager = function(opts) {
-	//这里的opts.brainService已经存放了大脑
+	//这里的opts.brainService通过ai模块给参数注册了大脑类型：player、tiger
 	this.brainService = opts.brainService;
 	this.area = opts.area;
+	//players、mobs存的是参数实例化后的大脑，这些实例对象被赋予了ai功能
 	this.players = {};
 	this.mobs = {};
 };
