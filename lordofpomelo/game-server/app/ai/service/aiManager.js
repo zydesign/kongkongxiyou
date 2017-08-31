@@ -2,6 +2,7 @@ var Blackboard = require('../meta/blackboard');
 var EntityType = require('../../consts/consts').EntityType;
 
 var exp = module.exports;
+//该模块作用：添加角色大脑，删除角色大脑，刷新大脑信息
 
 //ai管理器属性有：大脑服务、场景、玩家、怪物
 var Manager = function(opts) {
