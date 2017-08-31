@@ -11,6 +11,8 @@ var If = bt.If;       //if节点（带条件节点的系列节点）
 var Select = bt.Select;  //选择节点
 var consts = require('../../consts/consts');
 
+//player大脑类型
+
 /**
  * Auto fight brain.
  * Attack the target if have any.
