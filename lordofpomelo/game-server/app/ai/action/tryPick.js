@@ -44,7 +44,7 @@ pro.doAction = function() {
 		return bt.RES_FAIL;
 	}
 
-	//当前目标与角色目标不匹配，说明目标改变，要初始化当前目标，doAction结果返回失败
+	//当前目标与角色目标不匹配，目标类型即不是物品也不是装备的话，要初始化当前目标，doAction结果返回失败
 	if(targetId !== character.target 
 		|| (target.type !==EntityType.ITEM 
 			&& target.type !==EntityType.EQUIPMENT)) {
@@ -53,7 +53,7 @@ pro.doAction = function() {
 		return bt.RES_FAIL;
 	}
 
-	//如果目标存在，而且匹配角色目标，执行角色拾取函数
+	//如果目标存在，而且匹配角色目标，而且是道具，执行角色拾取函数
 	var res = character.pickItem(target.entityId);
 	//判断拾取结果：成功、物品消失，背包满，则初始化当前目标，角色目标，doAction结果返回成功
 	if(res === Pick.SUCCESS  
@@ -65,7 +65,7 @@ pro.doAction = function() {
 		return bt.RES_SUCCESS;
 	}
 
-	//如果拾取结果不在拾取范围内，黑板拾取距离赋值100，doAction结果返回失败
+	//如果拾取结果不在拾取范围内，初始化一次黑板拾取距离赋值100，doAction结果返回失败
 	if(res === Pick.NOT_IN_RANGE) {
 		blackboard.distanceLimit = 100;
 	}
