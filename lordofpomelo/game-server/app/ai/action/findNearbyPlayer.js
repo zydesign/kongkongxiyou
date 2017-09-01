@@ -23,6 +23,7 @@ pro.doAction = function() {
 		return bt.RES_SUCCESS;
 	}
  
+	//满足条件，执行角色增加仇恨函数，锁定目标
 	var area = this.blackboard.area;
 	//TODO: remove magic range: 300
 	//自身300范围内搜索玩家
