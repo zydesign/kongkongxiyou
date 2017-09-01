@@ -27,6 +27,7 @@ var pro = Action.prototype;
 pro.doAction = function() {
 	var blackboard=this.blackboard;
 	var character = blackboard.curCharacter;
+	////黑板的curTarget由player大脑的haveTarget赋值
 	var targetId = blackboard.curTarget;
 	var area = blackboard.area;
 
@@ -47,6 +48,7 @@ pro.doAction = function() {
 		return bt.RES_FAIL;
 	}
 
+	//满足NPC交谈条件，执行交谈函数，判断执行结果如果成功，doAction返回成功
 	var result = target.talk(character);
 	if(result === NPC.SUCCESS) {
 		blackboard.curTarget = null;
