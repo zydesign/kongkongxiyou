@@ -90,11 +90,14 @@ pro.doAction = function() {
 		blackboard.moved = true;
 		//如果目标坐标不存在而且目标不匹配，说明目标已经移动改变位置了
 	} else if (targetPos && (targetPos.x !== target.x || targetPos.y !== target.y)) {
+		//目标改变的距离
 		var dis1 = formula.distance(targetPos.x, targetPos.y, target.x, target.y);
+		//角色位置与目标最新坐标的距离
 		var dis2 = formula.distance(character.x, character.y, target.x, target.y);
 
 		//target position has changed
 		//目标位置已改变
+		//目标变化距离3倍后比到角色的距离大，而且
 		if (((dis1 * 3 > dis2) && (dis1 < distance)) || !blackboard.moved) {
 			targetPos.x = target.x;
 			targetPos.y = target.y;
