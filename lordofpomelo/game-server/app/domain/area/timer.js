@@ -4,6 +4,7 @@ var consts=require('../../consts/consts')
 var EntityType = consts.EntityType;
 var ActionType = consts.ActionType;
 
+//场景计时器timer模块
 var Timer = function(area) {
   this.area = area;
 };
@@ -11,6 +12,7 @@ var Timer = function(area) {
 module.exports = Timer;
 
 Timer.prototype.run = function() {
+  //(setInterval是js自带用法) 每隔100毫秒执行tick函数
   this.interval = setInterval(this.tick.bind(this), 100);
   this.isRunning=true;
   this.timeCount=0;
