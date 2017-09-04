@@ -22,6 +22,8 @@ var pro = Action.prototype;
  *					bt.RES_WAIT if the character need to move to the target;
  *					bt.RES_FAIL if any fails
  */
+
+//移动的条件：有目标，目标匹配角色目标，目标距离，判断移动还是停止移动
 pro.doAction = function() {
 
 	var blackboard=this.blackboard;
@@ -82,7 +84,7 @@ pro.doAction = function() {
 	}
 	//攻击距离
 	var distance = blackboard.distanceLimit || 150;
-	//判断目标是否在角色攻击距离内，如果在，停止移动，返回成功
+	//判断目标是否在角色攻击距离内，如果在，停止移动，doAction返回成功
 	if (formula.inRange(character, target, distance)) {
 		// console.log("AI moveToTargetForAttack=============>>in distance");
 
@@ -99,7 +101,7 @@ pro.doAction = function() {
 		return bt.RES_SUCCESS;
 	}
 
-	//如果角色类型为怪物，而且距离超过500，返回失败
+	//如果角色类型为怪物，而且距离超过500，doAction返回失败
 	if (character.type === EntityType.MOB) {
 		if (Math.abs(character.x - character.spawnX) > 500 ||
 			Math.abs(character.y - character.spawnY) > 500) {
@@ -115,7 +117,7 @@ pro.doAction = function() {
 
 	//目标位置
 	var targetPos = blackboard.targetPos;
-	//（上面已经判断：角色不在攻击范围内，角色类型不是怪物）如果移动停止或没有黑板目标坐标点，则赋值
+	//（上面已经判断：有目标，目标匹配，角色不在攻击范围内，角色类型不是怪物）如果移动停止或没有黑板目标坐标点，则赋值
 	if (!blackboard.moved || !targetPos) {
 		// console.log("AI moveToTargetForAttack=============>>move");
 		//执行角色移动函数。。。并赋值moved、targetPos 
@@ -132,8 +134,9 @@ pro.doAction = function() {
 			x: target.x,
 			y: target.y
 		};
+		//执行了移动，黑板移动属性为true
 		blackboard.moved = true;
-		//角色在移动，有黑板目标点，如果该目标点不匹配当前目标点
+		//角色在移动，有黑板目标点，如果该目标点不匹配当前目标点，说明目标移动了
 	} else if (targetPos && (targetPos.x !== target.x || targetPos.y !== target.y)) {
 		// console.log("AI moveToTargetForAttack=============>>move continue");
 
@@ -143,7 +146,7 @@ pro.doAction = function() {
 		var dis2 = formula.distance(character.x, character.y, target.x, target.y);
 
 		//target position has changed
-		//目标位置改变。（即目标发生了移动），角色要再靠近目标
+		//目标位置改变。（即目标发生了移动），，更新targetPos，角色要再靠近目标
 		if (((dis1 * 3 > dis2) && (dis1 < distance)) || !blackboard.moved) {
 			targetPos.x = target.x;
 			targetPos.y = target.y;
@@ -153,11 +156,13 @@ pro.doAction = function() {
 					blackboard.moved = false;
 					character.target = null;
 				}else {
+					//角色移动属性改为true
 					character.setIsMoving(true);
 				}
 			});
 		} else {
 			// if(character.type === consts.EntityType.MOB){
+			// 如果角色移动属性为false，黑板移动属性也改为false
 			if (!character.isMoving)
 				blackboard.moved = false;
 			// }
