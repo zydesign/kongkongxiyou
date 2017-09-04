@@ -24,6 +24,8 @@ var pro = Action.prototype;
  * @return {Number} bt.RES_SUCCESS if success to talk to npc;
  *					bt.RES_FAIL if any fails and set distanceLimit to blackboard stands for beyond the npc distance.
  */
+
+//成功条件：有目标，目标类型为NPC
 pro.doAction = function() {
 	var blackboard=this.blackboard;
 	var character = blackboard.curCharacter;
