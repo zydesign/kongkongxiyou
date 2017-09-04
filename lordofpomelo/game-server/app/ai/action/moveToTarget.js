@@ -6,6 +6,7 @@ var consts = require('../../consts/consts');
 var EntityType = consts.EntityType;
 var ActionType = consts.ActionType;
 
+//该节点用于拾取道具和与NPC对话
 var Action = function(opts) {
 	BTNode.call(this, opts.blackboard);
 };
@@ -70,7 +71,7 @@ pro.doAction = function() {
 	}
 
 	var targetPos = blackboard.targetPos;
-	//如果黑板的moved为false，执行角色移动函数，角色的Moving为true，黑板targetPos赋值，黑板的moved赋值true
+	//如果黑板的moved为false，执行角色移动函数，角色的Moving改为true，黑板targetPos赋值，黑板的moved改为true
 	if (!blackboard.moved) {
 		character.move(target.x, target.y, true, function(err, result) {
 			if (err || result === false) {
@@ -96,8 +97,7 @@ pro.doAction = function() {
 		var dis2 = formula.distance(character.x, character.y, target.x, target.y);
 
 		//target position has changed
-		//目标位置已改变
-		//目标变化距离3倍后比到角色的距离大，而且
+		//目标位置改变。（即目标发生了移动），，更新targetPos，角色要再靠近目标
 		if (((dis1 * 3 > dis2) && (dis1 < distance)) || !blackboard.moved) {
 			targetPos.x = target.x;
 			targetPos.y = target.y;
