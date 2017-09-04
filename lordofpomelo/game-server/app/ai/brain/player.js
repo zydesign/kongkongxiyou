@@ -17,14 +17,14 @@ var consts = require('../../consts/consts');
  * Auto fight brain.
  * Attack the target if have any.
  * Choose the 1st skill in fight skill list or normal attack by defaul.
- * 自动战斗大脑，如果有目标则发起攻击，选择第一个技能攻击或默认技能攻击
+ * 如果有目标则发起攻击，选择第一个技能攻击或默认技能攻击
  */
 var Brain = function(blackboard) {
 	var attack = genAttackAction(blackboard);  //生成攻击行为
 	var pick = genPickAction(blackboard);      //生成拾取行为
 	var talkToNpc = genNpcAction(blackboard);  //生成NPC行为
 
-	//实例一个选择节点
+	//实例一个选择节点，优先顺序 攻击>拾取>对话npc
 	var action = new Select({
 		blackboard: blackboard
 	});
@@ -40,7 +40,7 @@ var Brain = function(blackboard) {
 
 var pro = Brain.prototype;
 
-//更新行为
+//更新行为，执行大脑的action.doAction()
 pro.update = function() {
 	return this.action.doAction();
 };
@@ -50,6 +50,7 @@ var genAttackAction = function(blackboard) {
 	//try attack and move to target action
 	
 	//loopAttack循环节点的子节点：攻击节点attack    （尝试攻击 或 调整动作+尝试攻击）
+	//TryAndAdjust为选择节点
 	var attack = new TryAndAdjust({
 		blackboard: blackboard, 
 		//调整动作
@@ -110,10 +111,11 @@ var genAttackAction = function(blackboard) {
 		//如果目标类型为怪物或玩家，给黑板的属性curTarget赋值，条件返回true
 		if(target.type === consts.EntityType.MOB || 
 			target.type === consts.EntityType.PLAYER) {
+			//黑板的curTarget在这里赋值，就是角色目标存进来
 			bb.curTarget = targetId;
 			return true;
 		}
-		//如果目标不是怪物或玩家，而是npc，条件返回false
+		//如果目标不是怪物或玩家，而是npc、物品等，条件返回false
 		return false;
 	};
 
@@ -127,6 +129,7 @@ var genAttackAction = function(blackboard) {
 
 var genPickAction = function(blackboard) {
 	//try pick and move to target action
+	//选择节点：先tryAction，然后adjustAction+tryAction
 	var pick = new TryAndAdjust({
 		blackboard: blackboard, 
 		adjustAction: new MoveToTarget({
