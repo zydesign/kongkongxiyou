@@ -2,7 +2,7 @@ var Blackboard = require('../meta/blackboard');
 var EntityType = require('../../consts/consts').EntityType;
 
 var exp = module.exports;
-//该模块作用：1.添加角色大脑   2.删除角色大脑   3.刷新大脑信息（顺序执行攻击、拾取、npc对话）
+//该模块作用：1.添加角色大脑   2.删除角色大脑   3.刷新大脑信息（执行所有大脑的udate，顺序执行攻击、拾取、npc对话）
 
 //ai管理器属性有：大脑服务、场景、玩家、怪物
 var Manager = function(opts) {
