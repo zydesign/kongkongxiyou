@@ -2,7 +2,7 @@ var Blackboard = require('../meta/blackboard');
 var EntityType = require('../../consts/consts').EntityType;
 
 var exp = module.exports;
-//该模块作用：添加角色大脑，删除角色大脑，刷新大脑信息
+//该模块作用：1.添加角色大脑   2.删除角色大脑   3.刷新大脑信息（顺序执行攻击、拾取、npc对话）
 
 //ai管理器属性有：大脑服务、场景、玩家、怪物
 var Manager = function(opts) {
@@ -17,11 +17,11 @@ var Manager = function(opts) {
 module.exports = Manager;
 
 var pro = Manager.prototype;
-
+//启动ai管理器
 pro.start = function() {
 	this.started = true;
 };
-
+//关闭ai管理器
 pro.stop = function() {
 	this.closed = true;
 };
@@ -36,7 +36,7 @@ pro.stop = function() {
        //参数cs为角色数组
 pro.addCharacters = function(cs) {
 	 // return;
-	//如果还没开始或已经结束，则不增加角色大脑
+	//如果还没开启ai管理器或已经结束ai管理器，则不增加角色大脑
 	if(!this.started || this.closed) {
 		return;
 	}
@@ -88,7 +88,7 @@ pro.addCharacters = function(cs) {
  * 从ai管理器中通过id删除一个角色，（id为entityId）
  */
 pro.removeCharacter = function(id) {
-	//如果还没开始或已经结束，则不执行删除操作
+	//如果还没开启ai管理器或已经结束ai管理器，则不执行删除操作
 	if(!this.started || this.closed) {
 		return;
 	}
@@ -104,6 +104,7 @@ pro.removeCharacter = function(id) {
  */
 pro.update = function() {
 	//return;
+	//如果还没开启ai管理器或已经结束ai管理器，则不执行更新操作
 	if(!this.started || this.closed) {
 		return;
 	}
