@@ -11,6 +11,7 @@ var Timer = function(area) {
 
 module.exports = Timer;
 
+ //开启地图计时器。执行地图的tick时刻，轮询地图内的变量，当变量有变化的时候，通知客户端。
 Timer.prototype.run = function() {
   //(setInterval是js自带用法) 每隔100毫秒执行tick函数
   this.interval = setInterval(this.tick.bind(this), 100);
@@ -18,13 +19,17 @@ Timer.prototype.run = function() {
   this.timeCount=0;
 };
 
+//地图的tick时刻
 Timer.prototype.tick = function() {
   if (this.area) {
+    //执行场景的tick
     this.area.tick();
     this.timeCount++;
+    //每执行10次tick就执行一次场景的uptate1
     if (this.timeCount%10===0) {
       this.area.update1();
     }
+    //执行tick次数30后，初始化次数，并执行场景的update3
     if (this.timeCount>30) {
       this.timeCount=0;
       this.area.update3();
