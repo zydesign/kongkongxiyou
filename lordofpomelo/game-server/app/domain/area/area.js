@@ -27,6 +27,7 @@ var AreaKinds = consts.AreaKinds;
  * @param {Object} opts
  * @api public
  */
+//场景的初始化工厂函数
 var Instance = function(map,instanceId){
   this.map =map;
   this.instanceId = instanceId;
@@ -52,9 +53,9 @@ var Instance = function(map,instanceId){
   opts.towerHeight=300;
   this.aoi = aoiManager.getService(opts);
 
-  this.aiManager = ai.createManager({area:this});
-  this.patrolManager = patrol.createManager({area:this});
-  this.actionManager = new ActionManager();
+  this.aiManager = ai.createManager({area:this});  //ai工厂方法
+  this.patrolManager = patrol.createManager({area:this});  //巡逻工厂方法
+  this.actionManager = new ActionManager();  //动作工厂方法
 
   this.timer = new Timer(this);
   this.areaLogic=createAreaLogic(this);
@@ -108,9 +109,11 @@ Instance.prototype.isAreaState=function(areaState){
   return this.areaLogic.areaState===areaState;
 };
 
+//场景的tick时刻
 Instance.prototype.tick = function() {
   var currentTime = Date.now();
   var item;
+  //更新地图所有物品信息
   for (var id in this.items) {
     item = this.entities[id];
     // if(!item){
@@ -118,6 +121,7 @@ Instance.prototype.tick = function() {
     //   continue;
     // }
     item.update(currentTime);
+    //实体死亡，向地图内的玩家广播消息
     if (item.died) {
       this.channel.pushMessage('onRemoveEntities', {
         entities: [item.entityId]
@@ -126,11 +130,15 @@ Instance.prototype.tick = function() {
     }
   }
   //run all the action
+  //动作更新
   this.actionManager.update(currentTime);
+  //ai 更新
   this.aiManager.update();
+  //巡逻动作更新
   this.patrolManager.update();
 };
 
+//刷新角色信息
 Instance.prototype.updatePlayers = function() {
   var players = this.players;
   var entities = this.entities;
@@ -149,6 +157,7 @@ Instance.prototype.updatePlayers = function() {
   }
 };
 
+//刷新怪物，如果有怪物死亡，补充怪物
 Instance.prototype.updateZones=function(){
   var zones=this.zones;
   for (var key in zones) {
@@ -187,18 +196,24 @@ Instance.prototype.onUserLeave = function(playerId) {
 /**
  * @api public
  */
+//启动场景管理服务
 Instance.prototype.start = function() {
   if (this.isStartRun) {
     return;
   }
   this.isStartRun=true;
+  //aoi服务
   aoiEventManager.addEvent(this, this.aoi.aoi);
 
   //Init mob zones
+  //初始化怪物空间
   this.initMobZones();
+  //初始化NPC
   this.initNPCs();
 
+  //开启ai管理器
   this.aiManager.start();
+  //开启地图计时器。执行地图的tick，轮询地图内的变量，当变量有变化的时候，通知客户端。
   this.timer.run();
 };
 
