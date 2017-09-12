@@ -38,11 +38,11 @@ var Instance = function(map,instanceId){
   this.areaKind = opts.kind;
 
   //The map from player to entity
-  this.players = {};
-  this.users = {};
-  this.entities = {};
-  this.zones = {};
-  this.items = {};
+  this.players = {};  //玩家id
+  this.users = {};    //用户
+  this.entities = {}; //实体
+  this.zones = {};    //怪物区块
+  this.items = {};    
   this.npcs = {};
   this.channel = null;
 
@@ -97,10 +97,12 @@ Instance.prototype.stopBattle=function(){
   this.areaLogic.stopBattle();
 };
 
+//最终执行的是this.updatePlayers()
 Instance.prototype.update3=function(){
   this.areaLogic.update3();
 };
 
+//最终执行的是this.updateZones();
 Instance.prototype.update1=function(){
   this.areaLogic.update1();
 };
@@ -138,7 +140,7 @@ Instance.prototype.tick = function() {
   this.patrolManager.update();
 };
 
-//刷新角色信息
+//刷新玩家信息
 Instance.prototype.updatePlayers = function() {
   var players = this.players;
   var entities = this.entities;
@@ -157,7 +159,7 @@ Instance.prototype.updatePlayers = function() {
   }
 };
 
-//刷新怪物，如果有怪物死亡，补充怪物
+//刷新怪物区域，如果有怪物死亡，补充怪物
 Instance.prototype.updateZones=function(){
   var zones=this.zones;
   for (var key in zones) {
@@ -374,6 +376,7 @@ Instance.prototype.removeEntity = function(entityId) {
   if(!e) return true;
 
   //If the entity is a player, remove it
+  //使用if...else if...else if语句，作用等同行为树的选择节点
   if(e.type === EntityType.PLAYER) {
     this.getChannel().leave(e.userId, e.serverId);
 
