@@ -25,11 +25,11 @@ Timer.prototype.tick = function() {
     //执行场景的tick
     this.area.tick();
     this.timeCount++;
-    //每执行10次tick就执行一次场景的uptate1
+    //每执行10次tick就执行一次场景的uptate1，刷新怪物区域
     if (this.timeCount%10===0) {
       this.area.update1();
     }
-    //执行tick次数30后，初始化次数，并执行场景的update3
+    //执行tick次数30后，初始化次数，重新计算，并执行场景的update3，刷新角色信息
     if (this.timeCount>30) {
       this.timeCount=0;
       this.area.update3();
