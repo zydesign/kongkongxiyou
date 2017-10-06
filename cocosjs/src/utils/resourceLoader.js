@@ -25,9 +25,12 @@ ResourceLoader.prototype.complete = function() {
 
 ResourceLoader.prototype.loadAreaResource = function(loadingLayer) {
     var skinIds={};
+    
     //先声明加载技能资源函数
     function addSkillRes(skillId){
+        //先通过技能id获取技能特效data
         var skillEffect=dataApi.skill_effect.findById(skillId);
+        //通过技能data配置技能资源图片
         if (skillEffect) {
             cb.EntitySprite.loadResById(skillEffect.aEffectId);
             cb.EntitySprite.loadResById(skillEffect.tEffectId);
@@ -35,6 +38,7 @@ ResourceLoader.prototype.loadAreaResource = function(loadingLayer) {
         }
     };
 
+    //先获取所有角色数据（有玩家角色，各种怪物角色），然后遍历数组，每一份数据都加载图片资源，和该角色技能特效资源
     var allRoleDatas=dataApi.role.all();
     for (var key in allRoleDatas) {
         var roleData=allRoleDatas[key];
