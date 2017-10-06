@@ -34,6 +34,7 @@ var tipsBoxLayer = {
 		// 	cc.log("=====================>>12");
 		// };
 
+		//提示框的确认按钮事件监听
 		var self=this;
 		var touchEvent = function(sender, type) {
 			
