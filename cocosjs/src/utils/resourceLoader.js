@@ -55,6 +55,7 @@ ResourceLoader.prototype.loadAreaResource = function(loadingLayer) {
     this.isComplete=false;
     this.intervalId=setInterval(function() {
         self.indexCount++;
+        //进度条大于9时，调用 appHandler.enterScene()进入场景
         if (self.indexCount>9) {
             clearInterval(self.intervalId);
             if (!self.isComplete) {
@@ -67,5 +68,6 @@ ResourceLoader.prototype.loadAreaResource = function(loadingLayer) {
         }
     },0);
 
+    //这个loadingLayer由clientManager提供
     this.loadingLayer=loadingLayer;
 };
