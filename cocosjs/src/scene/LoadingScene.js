@@ -4,10 +4,12 @@ var LoadingLayer = BaseSceneLayer.extend({
     _ccsNode:null,
     ctor:function () {
         this._super();
+        //创建loading节点
         this.createCCSNode("uiccs/LoadingLayer.csb");
 
         var ccsNode=this._ccsNode;
 
+        //设置进度条节点图片
         this.loadingBar=ccsNode.getChildByName("loadingBar");
         this.loadingText=ccsNode.getChildByName("loadingText");
 
