@@ -68,6 +68,8 @@ cc.game.onStart = function() {
       channelId: sdkManager.getChannelId(),
       deviceModel: sdkManager.getDeviceModel()
     }
+    
+    //客户端管理器执行登录函数
     clientManager.login(loginInfo);
     // gameRun(loginInfo);
   // }
@@ -92,4 +94,5 @@ cc.game.onStart = function() {
   // }
 };
 
+//执行运行游戏
 cc.game.run();
