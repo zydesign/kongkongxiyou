@@ -1,4 +1,5 @@
 var appHandler = {
+	//进入场景
 	enterScene: function() {
 		cc.log("appHandler.enterScene==============>>");
 		cb.CommonLib.removeRes("uiimg/load_scene.png");
@@ -15,6 +16,7 @@ var appHandler = {
 				tipsBoxLayer.showErrorCode(data.code);
 				return;
 			}
+			//每10秒设置一下进入场景返回的data
 			setTimeout(function() {
     	 		app.setData(data);
     	 	},10);
