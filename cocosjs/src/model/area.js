@@ -1,4 +1,5 @@
 
+////app.setData调用new Area(data)实例场景类，而init（）是立即执行的，也切换到AreaScene场景
 var Area = function(opts, areaId) {
 	this.entities = {};
 	
@@ -26,7 +27,7 @@ var Area = function(opts, areaId) {
 
 var pro = Area.prototype;
 
-
+//loading场景切换到这个AreaScene
 pro.initColorBox = function(){
 	this.scene = new AreaScene();
 	cc.director.popToRootScene();
@@ -89,6 +90,7 @@ pro.initTransport = function(){
 	}
 };
 
+//app.setData调用这个函数
 pro.enterArea=function(){
 	cc.log("enterArea=================>>> areaId=",this.areaId);
 	if (this.areaKind === AreaKinds.SAFE_AREA) {
@@ -121,6 +123,7 @@ pro.run = function(){
 		mainPanel.showAreaTips(false);
 	}
 
+	//定时刷新实体动作，定时刷新怪物ai
 	cc.director.getScheduler().schedule(this.update,this,0, cc.REPEAT_FOREVER, 0, false,"areaScheduler");
 	cc.director.getScheduler().schedule(this.updateAI,this,0.1, cc.REPEAT_FOREVER, 0, false,"areaSchedulerAI");
 	soundManager.playerAreaMusic(this.areaData.soundId);
