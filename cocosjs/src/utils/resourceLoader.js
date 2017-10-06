@@ -18,9 +18,9 @@ ResourceLoader.prototype.loading = function(percent) {
 };
 
 ResourceLoader.prototype.complete = function() {
-    this.loadingLayer.setPercent(100);
+    this.loadingLayer.setPercent(100);     //进度条节点满100%进度
     this.loadingLayer.setString("加载完成...100%");
-    appHandler.resourceLoader = null;
+    appHandler.resourceLoader = null;     //资源读取器值设置为null
 };
 
 ResourceLoader.prototype.loadAreaResource = function(loadingLayer) {
@@ -68,6 +68,6 @@ ResourceLoader.prototype.loadAreaResource = function(loadingLayer) {
         }
     },0);
 
-    //这个loadingLayer由clientManager提供
+    //这个loadingLayer由appHandler提供，引用于loadingScene._loadingLayer脚本函数
     this.loadingLayer=loadingLayer;
 };
