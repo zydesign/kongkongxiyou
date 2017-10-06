@@ -13,6 +13,7 @@ var SelectLayer = BaseSceneLayer.extend({
         var _frontUpSprite = containerLayer.getChildByName("_frontUpSprite");
         var _frontDownSprite = containerLayer.getChildByName("_frontDownSprite");
         var enterButton = _frontDownSprite.getChildByName("enterButton");
+        //进入游戏按钮事件监听
         enterButton.addTouchEventListener(this.touchEvent, this);
         enterButton.setSoundEffectFile("");
         // enterButton.setSoundEffectFile("sound/ui/game_start.mp3");
@@ -25,10 +26,12 @@ var SelectLayer = BaseSceneLayer.extend({
         this.roleNameTextField = frontDownNode.getChildByName("roleNameTextField");
 
         var rondomBtn = frontDownNode.getChildByName("rondomBtn");
+        //随机名字事件监听
         rondomBtn.addTouchEventListener(this.touchEvent, this);
         rondomBtn.setPressedActionEnabled(true);
 
         var createBtn = frontDownNode.getChildByName("createBtn");
+        //创建角色按钮事件监听
         createBtn.addTouchEventListener(this.touchEvent, this);
 
         var detailNode = ccsNode.getChildByName("detailNode");
@@ -234,6 +237,7 @@ var SelectLayer = BaseSceneLayer.extend({
         this.showRoleSprite(index);
     },
 
+    //触摸事件
     touchEvent: function(sender, type) {
         if (type === ccui.Widget.TOUCH_ENDED) {
             var btnName = sender.getName();
@@ -278,7 +282,9 @@ var SelectLayer = BaseSceneLayer.extend({
         }
     },
 
+    //进入游戏按钮触发的函数
     enterGame: function() {
+        //获取选中的角色数据
         var playerData = this.getPlayerData(this.roleSpriteIndex);
         if (!playerData) {
             // tipsBoxLayer.showTipsBox("发生致命错误，玩家数据丢失，请重启游戏！");
@@ -291,9 +297,11 @@ var SelectLayer = BaseSceneLayer.extend({
             kindId: playerData.kindId,
             level:playerData.level
         };
+        //最后是通过客户端管理器登录角色到area场景
         clientManager.loginPlayer(playerInfo);
     },
 
+    //用户登录进入角色选择UI时，执行这个函数，首先设置了 this.playerDatas，之后的进入场景用到这个数据
     showPlayer: function(playerDatas, kindId) {
         if (this.isInit) return;
 
@@ -319,6 +327,7 @@ var SelectLayer = BaseSceneLayer.extend({
             if (kindId === 10002) {
                 index = 0;
             }
+            //显示角色图片
             this.showRoleSprite(index);
         }
 
