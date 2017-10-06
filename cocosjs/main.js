@@ -47,6 +47,7 @@
  *
  */
 
+//开始游戏前的加载工作
 cc.game.onStart = function(){
     if (cc.sys.isNative === true) {
         //require('src/pomelo-cocos2d-js/pomelo-cocos2d-js.js');
@@ -64,6 +65,8 @@ cc.game.onStart = function(){
     // The game will be resized when browser size change
     cc.view.resizeWithBrowserSize(true);
     //load resources
+ 
+    //游戏预加载，读取主要脚本文件，设置更新模式
     cc.LoaderScene.preload([], function () {
         
        if (true) {
@@ -92,5 +95,6 @@ cc.game.onStart = function(){
     }, this);
 };
 
+// 开始游戏
 cc.game.run();
 
