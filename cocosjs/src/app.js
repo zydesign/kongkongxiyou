@@ -1,5 +1,6 @@
 //require('src/ui/ui.js');
 
+//app类（全局函数）
 cb.App = cc.Class.extend({
 	ctor: function() {
 		this._delayTime = 0;
