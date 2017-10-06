@@ -1,4 +1,5 @@
 
+//加载场景层（loading层）
 var LoadingLayer = BaseSceneLayer.extend({
     _ccsNode:null,
     ctor:function () {
@@ -23,6 +24,7 @@ var LoadingLayer = BaseSceneLayer.extend({
 
 });
 
+//loading场景类。【main脚本new LoginScene()是调用这里】
 var LoadingScene = cc.Scene.extend({
     _loadingLayer:null,
     ctor:function () {
