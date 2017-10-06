@@ -25,6 +25,7 @@ ResourceLoader.prototype.complete = function() {
 
 ResourceLoader.prototype.loadAreaResource = function(loadingLayer) {
     var skinIds={};
+    //先声明加载技能资源函数
     function addSkillRes(skillId){
         var skillEffect=dataApi.skill_effect.findById(skillId);
         if (skillEffect) {
@@ -39,9 +40,14 @@ ResourceLoader.prototype.loadAreaResource = function(loadingLayer) {
         var roleData=allRoleDatas[key];
         // cb.EntitySprite.loadResById(roleData.id);
         var character = dataApi.character.findById(roleData.id);
+        
+        //通过角色皮肤id加载精灵图片资源
         cb.EntitySprite.loadResById(character.skinId);
         
+        //加载技能资源
         addSkillRes(character.skillId);
+        
+        //加载怪物技能资源
         if (cc.isString(roleData.skillIds)) {
             roleData.skillIds = JSON.parse(roleData.skillIds)
         }
@@ -53,6 +59,7 @@ ResourceLoader.prototype.loadAreaResource = function(loadingLayer) {
     var self=this;
     this.indexCount=0;
     this.isComplete=false;
+    //定时0秒执行loading函数，直到次数为10时停止定时器，（实则是假进度，加载到100%后，只是等待切换areaScene）
     this.intervalId=setInterval(function() {
         self.indexCount++;
         //进度条大于9时，调用 appHandler.enterScene()函数，删除loading背景，设置app.setData，并area.enterScene进入场景
