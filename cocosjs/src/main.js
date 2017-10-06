@@ -1,3 +1,5 @@
+//这个脚本是cc.game的方法，游戏加载前必运行
+
 cc.game.onStart = function() {
   //    cc.view.enableRetina(false);
   //    cc.view.adjustViewPort(true);
