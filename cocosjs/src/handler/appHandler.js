@@ -40,7 +40,7 @@ var appHandler = {
 		//clientManager已经引入了LoadingScene脚本，所以这里可以直接new
 		var loadingScene = new LoadingScene();
 		var loadingLayer = loadingScene._loadingLayer;
-		//切换场景到loadingScene，并使用这个场景，loading完成100%后，直接在这个场景加载area、player等资源
+		//切换场景到loadingScene，并使用这个场景，loading完成100%后，会new Area(data)实例场景，会切换到area场景
 		cc.director.replaceScene(loadingScene);
 
 		//资源读取器，clientManager已经引入了ResourceLoader脚本，所以这里可以直接new
