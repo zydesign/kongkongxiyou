@@ -118,6 +118,7 @@ var handler = module.exports;
 //   });
 // };
 
+//客户端appHandler.enterScene访问这里，进入场景一般为大厅等主场景
 handler.enterScene = function(msg, session, next) {
   var area = session.area;
   var player = session.player;
