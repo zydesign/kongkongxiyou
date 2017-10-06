@@ -36,6 +36,7 @@ cb.App = cc.Class.extend({
 		pomelo.isRuning=true;
 	},
 
+	//appHandler.enterScene调用这个函数。设置数据并进入场景
 	setData: function(data) {
 		this.areaId = data.areaId;
 		var curPlayerData=data.curPlayer;
