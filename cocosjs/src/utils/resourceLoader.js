@@ -55,7 +55,7 @@ ResourceLoader.prototype.loadAreaResource = function(loadingLayer) {
     this.isComplete=false;
     this.intervalId=setInterval(function() {
         self.indexCount++;
-        //进度条大于9时，调用 appHandler.enterScene()进入场景
+        //进度条大于9时，调用 appHandler.enterScene()函数，删除loading背景，设置app.setData，并area.enterScene进入场景
         if (self.indexCount>9) {
             clearInterval(self.intervalId);
             if (!self.isComplete) {
