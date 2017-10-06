@@ -94,7 +94,7 @@ var mapManager=cb.MapManager.getInstance();
 //js语法：声明变量前加var就是私有变量，不加var就是全局变量，相当于Windows.   /脚本被预加载后，就可以全局使用
 cb.ClientManager = cc.Class.extend({
     
-    //登录账户
+    //登录账户（客户端启动执行main脚本，main直接执行这个函数，并提供loginInfo参数）
     login:function(loginInfo){
         var serverIp = cb.CommonLib.getServerURL();
         var httpHost="http://"+serverIp+":3001/login";
@@ -209,16 +209,18 @@ cb.ClientManager = cc.Class.extend({
         });
     },
 
-    //进入游戏服务器
+    //进入场景
     entry:function(host, port, token, callback) {
+        //selectScene为切换场景
         var selectScene=new SelectScene();
         var selectLayer=selectScene._selectLayer;
-        cc.director.popToRootScene();
-        cc.director.pushScene(selectScene);
+        cc.director.popToRootScene(); //根场景
+        cc.director.pushScene(selectScene);  //进入角色选择场景
 
         var self=this;
         pomelo.init({host: host, port: port}, function() {
             circleLoadLayer.showCircleLoad(true);
+            //连接服务器获取uid、登录时间（倒计时等活动用到）、角色列表，上一次登录的角色类型
             pomelo.request('connector.entryHandler.entry', {token: token}, function(data) {
                 circleLoadLayer.hideCircleLoad();
 
@@ -237,9 +239,10 @@ cb.ClientManager = cc.Class.extend({
 
                 cc.log("uid="+data.uid+" kindId="+data.kindId+" serverTime="+data.time+" localTime="+Date.now());
 
-                //在这里更新了客户端的app的uid。（登录游戏进入角色选择界面时）
+                //在这里更新了客户端的app的uid、设置系统时间、
                 app.uid=data.uid;
                 app.setServerTime(data.time);
+                //角色选择UI显示要登录的角色  （这里是角色选择场景，这个UI有登录场景按钮的事件监听）
                 selectLayer.showPlayer(data.players,data.kindId);
             });
         });
@@ -247,6 +250,7 @@ cb.ClientManager = cc.Class.extend({
 
     //登录角色到场景
     loginPlayer: function(playerInfo) {
+        //属性管理器设置当前角色属性
         propertyManager.setCurPlayer(playerInfo);
         // cc.log("loginPlayer===>>playerInfo="+JSON.stringify(playerInfo));
         cb.SDKManager.getInstance().submitExtendData(playerInfo.playerId,playerInfo.name,playerInfo.level);
@@ -256,8 +260,10 @@ cb.ClientManager = cc.Class.extend({
             playerId=app.curPlayerId;
         }
         this.loading = true;
+        //显示loading图层
         circleLoadLayer.showCircleLoad();
         var self=this;
+        //连接服务器角色登录函数，建立一些了session后，返回code
         pomelo.request('connector.entryHandler.entryPlayer', {
             uid:app.uid,
             playerId: playerId
@@ -269,6 +275,7 @@ cb.ClientManager = cc.Class.extend({
                 return;
             }
             // tipsBoxLayer.showTipsBox("登陆角色成功");
+            //角色登录成功后，加载场景资源
             appHandler.loadResource();
         });
     },
