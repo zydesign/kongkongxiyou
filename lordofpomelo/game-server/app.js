@@ -45,6 +45,7 @@ app.configure('production', function() {
 		});
 	}
 	//Set areasIdMap, a map from area id to serverId.
+        //设置场景id图阵，为每一个场景服务器的id对象集合
 	if (app.serverType !== 'master') {
 		var areas = app.get('servers').area;
 		var areaIdMap = {};
@@ -58,20 +59,20 @@ app.configure('production', function() {
 		}
 		app.set('areaIdMap', areaIdMap);
 	}
-	// proxy configures
+	// proxy configures  代理配置
 	app.set('proxyConfig', {
-		cacheMsg: true,
+		cacheMsg: true,  //是否缓存
 		interval: 30,
 		lazyConnection: true
 	});
 
-	// remote configures
+	// remote configures  远程配置
 	app.set('remoteConfig', {
-		cacheMsg: true,
+		cacheMsg: true,  //是否缓存
 		interval: 30
 	});
 
-	// route configures
+	// route configures  路由配置
 	app.route('area', routeUtil.area);
 	app.route('connector', routeUtil.connector);
 
