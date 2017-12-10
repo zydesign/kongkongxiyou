@@ -150,6 +150,7 @@ module.exports = {
     chat: 'onChat'
   },
 
+  //加入行为类型：默认，移动，复活
   ActionType: {
     DEFAULT: 0,
     MOVE: 1,
