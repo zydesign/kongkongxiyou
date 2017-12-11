@@ -53,10 +53,12 @@ pro.addCharacters = function(cs) {
 	for(var i=0, l=cs.length; i<l; i++) {
 		c = cs[i];
 		var brain;
-		//如果c.type的类型为玩家，continue才执行后面，否则遍历下一个
+		 
 		if(c.type ===EntityType.PLAYER) {
 			// continue;
+			//如果角色组已经有了该角色，遍历下一个
 			if(this.players[c.entityId]) {
+				//continue是结束本次循环，也即是进行下一个遍历
 				continue;
 			}
 
