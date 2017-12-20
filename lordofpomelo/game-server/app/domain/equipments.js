@@ -17,6 +17,7 @@ var consts=require('../consts/consts');
  * @param {Object} opts
  * @api public
  */
+//算是装备的管理器，不是生成器
 var Equipments = function(opts) {
   // Persistent.call(this, opts);
   // this.playerId = opts.playerId;
